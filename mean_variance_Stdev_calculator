@@ -1,0 +1,43 @@
+import numpy as np
+
+def calculate():
+    numbers = []
+    while len(numbers) != 9:
+        try:
+            num = float(input(f"Enter number {len(numbers) + 1}: "))
+            numbers.append(num)
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+    ###print (numbers)
+    
+    for num in numbers:
+        matrix =([numbers[0:3], numbers[3:6], numbers[6:9]])
+    print (matrix)
+    
+    mean_axis0 = np.mean(matrix, axis=0)
+    mean_axis1 = np.mean(matrix, axis=1)
+    mean_flatt = np.mean(matrix)
+    variance_axis0 = np.var(matrix, axis=0)
+    variance_axis1 = np.var(matrix, axis=1)
+    variance_flatt = np.var(matrix)
+    std_axis0 = np.std(matrix, axis=0)
+    std_axis1 = np.std(matrix, axis=1)
+    std_flatt = np.std(matrix)
+    max_axis0 = np.max(matrix, axis=0)
+    max_axis1 = np.max(matrix, axis=1) 
+    max_flatt = np.max(matrix)
+    min_axis0 = np.min(matrix, axis=0)
+    min_axis1 = np.min(matrix, axis=1) 
+    min_flatt = np.min(matrix)
+    sum_axis0 = np.sum(matrix, axis=0)
+    sum_axis1 = np.sum(matrix, axis=1) 
+    sum_flatt = np.sum(matrix)
+    
+    result_dict = {"Mean ":[[mean_axis0.tolist()], [mean_axis1.tolist()],mean_flatt],
+                  "Variance":[[variance_axis0.tolist()], [variance_axis1.tolist()], variance_flatt],
+                  "Standard Deviation":[[std_axis0.tolist()], [std_axis1.tolist()], std_flatt],
+                  "Max": [[max_axis0.tolist()], [max_axis1.tolist()], max_flatt],
+                  "Min": [[min_axis0.tolist()], [min_axis1.tolist()], min_flatt],
+                  "Sum": [[sum_axis0.tolist()], [sum_axis1.tolist()], sum_flatt]
+                  }
+    return result_dict
