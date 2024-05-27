@@ -1,1 +1,62 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy.stats import linregress
 
+def draw_plot():
+    # Read data from file
+    df = pd.read_csv("epa-sea-level.csv")
+
+
+    # Create scatter plot
+    plt.figure(figsize=(10, 6))
+    plt.scatter(df["Year"], df["CSIRO Adjusted Sea Level"], label="CSIRO Adjusted Sea Level", color="blue")
+    plt.xlabel("Year")
+    plt.ylabel("Sea Level (inches)")
+    plt.title("Rise in Sea Level")
+
+
+    # Create first line of best fit
+    # Linear regression from 1880 to 2050
+    slope_1880, intercept_1880, _, _, _ = linregress(df["Year"], df["CSIRO Adjusted Sea Level"])
+    x_1880 = np.arange(1880, 2051)
+    y_1880 = slope_1880 * x_1880 + intercept_1880
+    plt.plot(x_1880, y_1880, label="Linear Regression (1880-2050)", color="red")
+
+
+    # Create second line of best fit
+    # Linear regression from 2000 to 2050
+    slope_2000, intercept_2000, _, _, _ = linregress(df.loc[df["Year"] >= 2000, "Year"],
+                                                 df.loc[df["Year"] >= 2000, "CSIRO Adjusted Sea Level"])
+    x_2000 = np.arange(2000, 2051)
+    y_2000 = slope_2000 * x_2000 + intercept_2000
+    plt.plot(x_2000, y_2000, label="Linear Regression (2000-2050)", color="green")
+
+
+    # Predicted sea level rise in 2050
+    predicted_sea_level_2050_1880 = slope_1880 * 2050 + intercept_1880
+    predicted_sea_level_2050_2000 = slope_2000 * 2050 + intercept_2000
+
+
+    # Annotate the predictions
+    plt.annotate(f"Predicted rise in 2050 (1880-2050): {predicted_sea_level_2050_1880:.2f} inches",
+                xy=(2050, predicted_sea_level_2050_1880), xycoords="data",
+                xytext=(10, 30), textcoords="offset points",
+                arrowprops=dict(arrowstyle="->", color="red"))
+    plt.annotate(f"Predicted rise in 2050 (2000-2050): {predicted_sea_level_2050_2000:.2f} inches",
+                xy=(2050, predicted_sea_level_2050_2000), xycoords="data",
+                xytext=(10, -30), textcoords="offset points",
+                arrowprops=dict(arrowstyle="->", color="green"))
+
+
+    print(f"Predicted sea level rise in 2050 (1880-2050): {predicted_sea_level_2050_1880:.2f} inches")
+    print(f"Predicted sea level rise in 2050 (2000-2050): {predicted_sea_level_2050_2000:.2f} inches")
+
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+    
+
+    
+    # Save plot and return data for testing (DO NOT MODIFY)
+    plt.savefig('sea_level_plot.png')
+    return plt.gca()
